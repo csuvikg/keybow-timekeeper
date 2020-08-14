@@ -1,1 +1,9 @@
+# virtualenv
 venv/
+
+# IntelliJ
+.idea/
+*.iml
+
+# temp
+main.py
