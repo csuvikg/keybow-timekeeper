@@ -1,6 +1,10 @@
+import time
 import keybow
 from transitions import Machine
 from enum import Enum, auto
+
+
+keybow.setup(keybow.MINI)
 
 
 class State(Enum):
@@ -67,3 +71,9 @@ def handle_key(index, state):
     pressed[index] = state
     if not state:
         on_press[timekeeper.state]()
+
+
+while True:
+    keybow.show()
+    time.sleep(1.0 / 60.0)
+
