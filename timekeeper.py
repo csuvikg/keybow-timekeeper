@@ -21,57 +21,49 @@ transitions = [
         'trigger': 'start',
         'source': State.OFF,
         'dest': State.DECIDE_ON_TASK,
-        'before': 'change_color',
-        'after': 'print_debug'
+        'after': 'change_color'
     },
     {
         'trigger': 'decide',
         'source': State.DECIDE_ON_TASK,
         'dest': State.WORKING,
-        'before': 'change_color',
-        'after': 'print_debug'
+        'after': 'change_color'
     },
     {
         'trigger': 'pause',
         'source': State.WORKING,
         'dest': State.WORKING_PAUSED,
-        'before': 'change_color',
-        'after': 'print_debug'
+        'after': 'change_color'
     },
     {
         'trigger': 'resume',
         'source': State.WORKING_PAUSED,
         'dest': State.WORKING,
-        'before': 'change_color',
-        'after': 'print_debug'
+        'after': 'change_color'
     },
     {
         'trigger': 'finish',
         'source': State.WORKING,
         'dest': State.BREAK,
-        'before': 'change_color',
-        'after': 'print_debug'
+        'after': 'change_color'
     },
     {
         'trigger': 'pause',
         'source': State.BREAK,
         'dest': State.BREAK_PAUSED,
-        'before': 'change_color',
-        'after': 'print_debug'
+        'after': 'change_color'
     },
     {
         'trigger': 'resume',
         'source': State.BREAK_PAUSED,
         'dest': State.BREAK,
-        'before': 'change_color',
-        'after': 'print_debug'
+        'after': 'change_color'
     },
     {
         'trigger': 'start_next',
         'source': State.BREAK,
         'dest': State.DECIDE_ON_TASK,
-        'before': 'change_color',
-        'after': 'print_debug'
+        'after': 'change_color'
     },
 ]
 
@@ -92,11 +84,9 @@ class Timekeeper(Machine):
     def increment_turns(self): self.turns += 1
 
     def change_color(self):
+        print(self.state)
         r, g, b = led_color[self.state]
         keybow.set_led(1, r, g, b)
-
-    def print_debug(self):
-        print(self.state)
 
     def __init__(self):
         Machine.__init__(self, states=State, initial=State.OFF, transitions=transitions)
