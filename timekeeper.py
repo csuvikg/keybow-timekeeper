@@ -3,7 +3,6 @@ import keybow
 from transitions import Machine
 from enum import Enum, auto
 
-
 keybow.setup(keybow.MINI)
 
 
@@ -18,16 +17,23 @@ class State(Enum):
 
 # { 'trigger': 'melt', 'source': 'solid', 'dest': 'liquid', 'prepare': ['heat_up', 'count_attempts'], 'conditions': 'is_really_hot', 'after': 'stats'},
 transitions = [
-    {'trigger': 'start', 'source': State.OFF, 'dest': State.DECIDE_ON_TASK, 'prepare': ['change_color']},
-    {'trigger': 'decide', 'source': State.DECIDE_ON_TASK, 'dest': State.WORKING, 'prepare': ['change_color']},
-    {'trigger': 'pause', 'source': State.WORKING, 'dest': State.WORKING_PAUSED, 'prepare': ['change_color']},
-    {'trigger': 'resume', 'source': State.WORKING_PAUSED, 'dest': State.WORKING, 'prepare': ['change_color']},
-    {'trigger': 'finish', 'source': State.WORKING, 'dest': State.BREAK, 'prepare': ['change_color']},
-    {'trigger': 'pause', 'source': State.BREAK, 'dest': State.BREAK_PAUSED, 'prepare': ['change_color']},
-    {'trigger': 'resume', 'source': State.BREAK_PAUSED, 'dest': State.BREAK, 'prepare': ['change_color']},
-    {'trigger': 'start_next', 'source': State.BREAK, 'dest': State.DECIDE_ON_TASK, 'prepare': ['change_color']},
+    {'trigger': 'start', 'source': State.OFF, 'dest': State.DECIDE_ON_TASK, 'prepare': ['change_color'],
+     'after': 'print_debug'},
+    {'trigger': 'decide', 'source': State.DECIDE_ON_TASK, 'dest': State.WORKING, 'prepare': ['change_color'],
+     'after': 'print_debug'},
+    {'trigger': 'pause', 'source': State.WORKING, 'dest': State.WORKING_PAUSED, 'prepare': ['change_color'],
+     'after': 'print_debug'},
+    {'trigger': 'resume', 'source': State.WORKING_PAUSED, 'dest': State.WORKING, 'prepare': ['change_color'],
+     'after': 'print_debug'},
+    {'trigger': 'finish', 'source': State.WORKING, 'dest': State.BREAK, 'prepare': ['change_color'],
+     'after': 'print_debug'},
+    {'trigger': 'pause', 'source': State.BREAK, 'dest': State.BREAK_PAUSED, 'prepare': ['change_color'],
+     'after': 'print_debug'},
+    {'trigger': 'resume', 'source': State.BREAK_PAUSED, 'dest': State.BREAK, 'prepare': ['change_color'],
+     'after': 'print_debug'},
+    {'trigger': 'start_next', 'source': State.BREAK, 'dest': State.DECIDE_ON_TASK, 'prepare': ['change_color'],
+     'after': 'print_debug'},
 ]
-
 
 led_color = {
     State.OFF: (0, 0, 0),
@@ -42,11 +48,15 @@ led_color = {
 class Timekeeper(Machine):
     timer_start = 0
     turns = 0
+
     def increment_turns(self): self.turns += 1
 
     def change_color(self):
         r, g, b = led_color[self.state]
         keybow.set_led(1, r, g, b)
+
+    def print_debug(self):
+        print(self.state)
 
     def __init__(self):
         Machine.__init__(self, states=State, initial=State.OFF, transitions=transitions)
@@ -76,4 +86,3 @@ def handle_key(index, state):
 while True:
     keybow.show()
     time.sleep(1.0 / 60.0)
-
