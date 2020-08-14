@@ -17,22 +17,62 @@ class State(Enum):
 
 # { 'trigger': 'melt', 'source': 'solid', 'dest': 'liquid', 'prepare': ['heat_up', 'count_attempts'], 'conditions': 'is_really_hot', 'after': 'stats'},
 transitions = [
-    {'trigger': 'start', 'source': State.OFF, 'dest': State.DECIDE_ON_TASK, 'prepare': ['change_color'],
-     'after': 'print_debug'},
-    {'trigger': 'decide', 'source': State.DECIDE_ON_TASK, 'dest': State.WORKING, 'prepare': ['change_color'],
-     'after': 'print_debug'},
-    {'trigger': 'pause', 'source': State.WORKING, 'dest': State.WORKING_PAUSED, 'prepare': ['change_color'],
-     'after': 'print_debug'},
-    {'trigger': 'resume', 'source': State.WORKING_PAUSED, 'dest': State.WORKING, 'prepare': ['change_color'],
-     'after': 'print_debug'},
-    {'trigger': 'finish', 'source': State.WORKING, 'dest': State.BREAK, 'prepare': ['change_color'],
-     'after': 'print_debug'},
-    {'trigger': 'pause', 'source': State.BREAK, 'dest': State.BREAK_PAUSED, 'prepare': ['change_color'],
-     'after': 'print_debug'},
-    {'trigger': 'resume', 'source': State.BREAK_PAUSED, 'dest': State.BREAK, 'prepare': ['change_color'],
-     'after': 'print_debug'},
-    {'trigger': 'start_next', 'source': State.BREAK, 'dest': State.DECIDE_ON_TASK, 'prepare': ['change_color'],
-     'after': 'print_debug'},
+    {
+        'trigger': 'start',
+        'source': State.OFF,
+        'dest': State.DECIDE_ON_TASK,
+        'before': 'change_color',
+        'after': 'print_debug'
+    },
+    {
+        'trigger': 'decide',
+        'source': State.DECIDE_ON_TASK,
+        'dest': State.WORKING,
+        'before': 'change_color',
+        'after': 'print_debug'
+    },
+    {
+        'trigger': 'pause',
+        'source': State.WORKING,
+        'dest': State.WORKING_PAUSED,
+        'before': 'change_color',
+        'after': 'print_debug'
+    },
+    {
+        'trigger': 'resume',
+        'source': State.WORKING_PAUSED,
+        'dest': State.WORKING,
+        'before': 'change_color',
+        'after': 'print_debug'
+    },
+    {
+        'trigger': 'finish',
+        'source': State.WORKING,
+        'dest': State.BREAK,
+        'before': 'change_color',
+        'after': 'print_debug'
+    },
+    {
+        'trigger': 'pause',
+        'source': State.BREAK,
+        'dest': State.BREAK_PAUSED,
+        'before': 'change_color',
+        'after': 'print_debug'
+    },
+    {
+        'trigger': 'resume',
+        'source': State.BREAK_PAUSED,
+        'dest': State.BREAK,
+        'before': 'change_color',
+        'after': 'print_debug'
+    },
+    {
+        'trigger': 'start_next',
+        'source': State.BREAK,
+        'dest': State.DECIDE_ON_TASK,
+        'before': 'change_color',
+        'after': 'print_debug'
+    },
 ]
 
 led_color = {
