@@ -67,6 +67,22 @@ transitions = [
     },
 ]
 
+
+def led_fade(index, c1, c2):
+    r1, g1, b1 = c1
+    r2, g2, b2 = c2
+
+    steps = 10
+    delta_r = int((r1 - r2) // steps)
+    delta_g = int((g1 - g2) // steps)
+    delta_b = int((b1 - b2) // steps)
+
+    for i in range(0, steps):
+        keybow.set_led(index, i * delta_r, i * delta_g, i * delta_b)
+        time.sleep(2.0 / 60.0)
+    keybow.set_led(index, r2, g2, b2)
+
+
 led_color = {
     State.OFF: (0, 0, 0),
     State.DECIDE_ON_TASK: (50, 0, 50),
@@ -80,13 +96,17 @@ led_color = {
 class Timekeeper(Machine):
     timer_start = 0
     turns = 0
+    previous_color = led_color[State.OFF]
 
     def increment_turns(self): self.turns += 1
 
+    def set_previous_color(self):
+        print(f"Previous: {self.state}")
+        self.previous_color = led_color[self.state]
+
     def change_color(self):
-        print(self.state)
-        r, g, b = led_color[self.state]
-        keybow.set_led(1, r, g, b)
+        print(f"Current: {self.state}")
+        led_fade(2, self.previous_color, led_color[self.state])
 
     def __init__(self):
         Machine.__init__(self, states=State, initial=State.OFF, transitions=transitions)
