@@ -100,13 +100,10 @@ class Timekeeper(Machine):
 
     def increment_turns(self): self.turns += 1
 
-    def set_previous_color(self):
-        print(f"Previous: {self.state}")
-        self.previous_color = led_color[self.state]
-
     def change_color(self):
         print(f"Current: {self.state}")
         led_fade(2, self.previous_color, led_color[self.state])
+        self.previous_color = led_color[self.state]
 
     def __init__(self):
         Machine.__init__(self, states=State, initial=State.OFF, transitions=transitions)
